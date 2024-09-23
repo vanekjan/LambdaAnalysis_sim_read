@@ -31,7 +31,7 @@ void Acceptance_corr_K0s(const int energy = 510)
   float const pT_bins_corr[nPtBins_corr+1] = { 0.5, 1.5, 5.};
 
   const int nEtaBins = 3;
-  float const eta_bins[nEtaBins+1] = { -1, -0.4, 0.4, 1 };
+  float const eta_bins[nEtaBins+1] = { -1, -0.2, 0.2, 1 };
 
   TFile *outFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/output/K0s_cosThetaStar_eff_work.root", "recreate");
 
@@ -40,11 +40,13 @@ void Acceptance_corr_K0s(const int energy = 510)
 
   if(energy == 510)
   {
-    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run17/output_K0s_pp_510_MB_1B_events.root", "READ");
+    //inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run17/output_K0s_pp_510_MB_1B_events.root", "READ");
+    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run17/output_K0s_pp_510_MB_1B_events_tight_eta.root", "READ");
   }
   else if(energy == 200)
   {
-    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run12/output_K0s_pp_200_MB_1B_events.root", "READ");
+    //inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run12/output_K0s_pp_200_MB_1B_events.root", "READ");
+    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run12/output_K0s_pp_200_MB_1B_events_tight_eta.root", "READ");
   }
   else
   {
@@ -61,12 +63,16 @@ void Acceptance_corr_K0s(const int energy = 510)
   TH1D *K0s_K0s_cosThetaProdPlane_hist = (TH1D*)inFile->Get("K0s_K0s_cosThetaProdPlane");
 
   TH1D *K0s_K0s_cosThetaProdPlane_pT_hist[nPtBins_corr][nPtBins_corr];
+  TH1D *K0s_K0s_cosThetaProdPlane_pT_hist_tight_eta[nPtBins_corr][nPtBins_corr];
+
   TH1D *K0s_K0s_cosThetaProdPlane_eta_hist[nEtaBins][nEtaBins];
 
 
   TH1D *K0s_K0s_cosThetaProdPlane_cuts_hist = (TH1D*)inFile->Get("K0s_K0s_cosThetaProdPlane_cuts");
 
   TH1D *K0s_K0s_cosThetaProdPlane_pT_cuts_hist[nPtBins_corr][nPtBins_corr];
+  TH1D *K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[nPtBins_corr][nPtBins_corr];
+
   TH1D *K0s_K0s_cosThetaProdPlane_eta_cuts_hist[nEtaBins][nEtaBins];
 
 
@@ -242,6 +248,40 @@ void Acceptance_corr_K0s(const int energy = 510)
       K0s_K0s_text_pT->Draw("same");
 
       K0s_K0s_cosThetaProdPlane_pT_corr_can->SaveAs(Form("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/figs/efficiency/K0s/correlations/K0s_K0s_cosThetaProdPlane_pT1_%i_pT2_%i_eff.png", pTbin1, pTbin2));
+      //_________________________________________________________________________________________________
+
+
+      TCanvas *K0s_K0s_cosThetaProdPlane_tight_eta_pT_corr_can = new TCanvas(Form("K0s_K0s_cosThetaProdPlane_pT_corr_can_tight_eta_pT1_%i_pT2_%i", pTbin1, pTbin2), Form("K0s_K0s_cosThetaProdPlane_pT_corr_can_tight_eta_pT1_%i_pT2_%i", pTbin1, pTbin2), 1200, 1000);
+
+      K0s_K0s_cosThetaProdPlane_pT_hist_tight_eta[pTbin1][pTbin2] = (TH1D*)inFile->Get(Form("K0s_K0s_cosThetaProdPlane_tight_eta_pT1_%i_pT2_%i_hist", pTbin1, pTbin2));
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2] = (TH1D*)inFile->Get(Form("K0s_K0s_cosThetaProdPlane_cuts_tight_eta_pT1_%i_pT2_%i_hist", pTbin1, pTbin2));
+
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->Sumw2();
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->SetNameTitle(Form("K0s_K0s_cosThetaProdPlane_tight_eta_pT1_%i_pT2_%i_eff", pTbin1, pTbin2), Form("K0s_K0s_cosThetaProdPlane_tight_eta_pT1_%i_pT2_%i_eff", pTbin1, pTbin2));
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->Divide(K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2], K0s_K0s_cosThetaProdPlane_pT_hist_tight_eta[pTbin1][pTbin2], 1, 1, "b");
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->SetMarkerStyle(20);
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->SetMarkerColor(kRed);
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->SetLineColor(kRed);
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->GetXaxis()->SetTitle("cos(#theta*)");
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->GetXaxis()->CenterTitle();
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->GetYaxis()->SetTitle("Acceptance");
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->GetYaxis()->CenterTitle();
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->SetMinimum(0);
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->Draw("p e");
+      K0s_K0s_cosThetaProdPlane_pT_cuts_hist_tight_eta[pTbin1][pTbin2]->Write();
+
+      TPaveText *K0s_K0s_text_pT_tight_eta = new TPaveText(0.6, 0.2, 0.8, 0.4, "NDC");
+      K0s_K0s_text_pT_tight_eta->AddText(Form("MC p+p #sqrt{s} = %i GeV", energy));
+      K0s_K0s_text_pT_tight_eta->AddText("Minimum bias");
+      K0s_K0s_text_pT_tight_eta->AddText("K_{s}^{0}-K_{s}^{0}");
+      //K0s_K0s_text_pT_tight_eta->AddText("No cuts_hist_tight_eta");
+      K0s_K0s_text_pT_tight_eta->AddText("|#eta| < 0.2");
+      K0s_K0s_text_pT_tight_eta->AddText(Form("%0.1f < p_{T}^{1} < %0.1f", pT_bins_corr[pTbin1], pT_bins_corr[pTbin1+1]));
+      K0s_K0s_text_pT_tight_eta->AddText(Form("%0.1f < p_{T}^{2} < %0.1f", pT_bins_corr[pTbin2], pT_bins_corr[pTbin2+1]));
+      K0s_K0s_text_pT_tight_eta->SetFillColorAlpha(0, 0.01);
+      K0s_K0s_text_pT_tight_eta->Draw("same");
+
+      K0s_K0s_cosThetaProdPlane_tight_eta_pT_corr_can->SaveAs(Form("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/figs/efficiency/K0s/correlations/K0s_K0s_cosThetaProdPlane_tight_eta_pT1_%i_pT2_%i_eff.png", pTbin1, pTbin2));
       //_________________________________________________________________________________________________
 
 

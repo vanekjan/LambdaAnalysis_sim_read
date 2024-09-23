@@ -31,7 +31,8 @@ void Acceptance_corr(const int energy = 510)
   float const pT_bins_corr[nPtBins_corr+1] = { 0.5, 1.5, 5.};
 
   const int nEtaBins = 3;
-  float const eta_bins[nEtaBins+1] = { -1, -0.4, 0.4, 1 };
+  float const eta_bins[nEtaBins+1] = { -1, -0.2, 0.2, 1 };
+  //float const eta_bins[nEtaBins+1] = { -1, -0.4, 0.4, 1 };
 
   TFile *outFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/output/L_cosThetaStar_eff_work.root", "recreate");
 
@@ -41,11 +42,13 @@ void Acceptance_corr(const int energy = 510)
 
   if(energy == 510)
   {
-    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run17/output_Lambda_pp_510_MB_1B_events_new.root", "READ");
+    //inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run17/output_Lambda_pp_510_MB_1B_events_new.root", "READ");
+    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run17/output_Lambda_pp_510_MB_1B_events_tight_eta.root", "READ");
   }
   else if(energy == 200)
   {
-    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run12/output_Lambda_pp_200_MB_1B_events_new.root", "READ");
+    //inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run12/output_Lambda_pp_200_MB_1B_events_new.root", "READ");
+    inFile = new TFile("/home/jvanek/C_drive_windows/Work/Analysis/STAR/Simulation/PYTHIA/input/Run12/output_Lambda_pp_200_MB_1B_events_tight_eta.root", "READ");
   }
   else
   {
@@ -469,7 +472,8 @@ void Acceptance_corr(const int energy = 510)
       L0_L0bar_text_pT->AddText("Minimum bias");
       L0_L0bar_text_pT->AddText("#Lambda-#bar{#Lambda}");
       //L0_L0bar_text_pt->AddText("No cuts_hist");
-      L0_L0bar_text_pT->AddText("|#eta| < 1");
+      //L0_L0bar_text_pT->AddText("|#eta| < 1");
+      L0_L0bar_text_pT->AddText("|#eta| < 0.2");
       L0_L0bar_text_pT->AddText(Form("%0.1f < p_{T}^{1} < %0.1f", pT_bins_corr[pTbin1], pT_bins_corr[pTbin1+1]));
       L0_L0bar_text_pT->AddText(Form("%0.1f < p_{T}^{2} < %0.1f", pT_bins_corr[pTbin2], pT_bins_corr[pTbin2+1]));
       L0_L0bar_text_pT->SetFillColorAlpha(0, 0.01);
